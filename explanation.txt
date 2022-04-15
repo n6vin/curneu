@@ -1,0 +1,34 @@
+C++-IQ-002
+Question:
+Understand and implement a C++ console-based application to perform the Rivest-Shamir- Adleman (RSA) algorithm in C++ to encrypt and decrypt the given 3D file (.OBJ).The encryption and decryption process needs to be performed with multi-threading process using C++.
+
+
+RSA algorithm is asymmetric cryptography algorithm. 
+Asymmetric actually means that it works on two different keys i.e. Public Key and Private Key. As the name describes that the Public Key is given to everyone and Private key is kept private.
+
+Generate public and private keys : 
+
+   1. Choose two prime numbers p and q.
+   2. Compute n = p*q.
+   3. Calculate phi = (p-1) * (q-1).
+   4. Choose an integer e such that 1 < e < phi(n) and gcd(e, phi(n)) = 1; i.e., e and phi(n) are coprime.
+   5. Calculate d as d ≡ e−1 (mod phi(n)); here, d is the modular multiplicative inverse of e modulo phi(n).
+   6. For encryption, c = m^e mod n, where m = original message.
+   7. For decryption, m = c^d mod n.
+
+in main.cpp :
+struct ThreadControl is defined for the multithreading process
+Mutex is for exclusive access of shared resources, while conditional variable is about waiting for a condition to be true
+in the main function the primes and phi value , public and private keys are generated .
+using ifstream a file to read from and using ofstream a file to store the encrypted data is read from the user . 
+we use thread::hardware_concurrency() to find the number of aproximate hardware resouces available and encryptprocessor using multithreading,efficiently works through the large data file given .
+the encrypt function uses fast modular exponentiation to calculate data^e mod n efficiently in O(log e) time complexity
+
+the Range value is given 256 digits as it is near impossible to calculate the values greater than that , reference  : https://en.wikipedia.org/wiki/RSA_Factoring_Challenge
+
+circular_buffer.hpp :
+contains the implementation for cicular buffer datastructure
+Circular buffer is a FIFO data structure that treats memory to be circular; that is, the read/write indices loop back to 0 after it reaches the buffer length. This is achieved by two pointers to the array, the “head” pointer and the “tail” pointer. As data is added (write) to the buffer, the head pointer is incremented and likewise, when the data is being removed (read) the tail pointer is incremented. The definition of head, tail, their movement direction and write and read location are all implementation dependent but the idea/goal remains the same.
+
+dmain.cpp :
+dmain.cpp is similar to main.cpp but it decrypts the encrypted file using the private key (D,N)
